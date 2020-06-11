@@ -1,0 +1,8 @@
+.DS_Store
+.idea
+.gradle
+.gitignore
+build
+gradle
+
+src/main/resources/application_dev.yml
