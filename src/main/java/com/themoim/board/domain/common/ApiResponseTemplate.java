@@ -17,13 +17,13 @@ public class ApiResponseTemplate {
     private String message;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<Object> data;
+    private Object data;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String accessToken;
 
     @Builder
-    public ApiResponseTemplate(HttpStatus httpStatus, String message, List<Object> data, String accessToken) {
+    public ApiResponseTemplate(HttpStatus httpStatus, String message, Object data, String accessToken) {
         this.code = httpStatus.value();
         this.message = message;
         this.data = data;
@@ -45,7 +45,7 @@ public class ApiResponseTemplate {
                 .build();
     }
 
-    public static ApiResponseTemplate OK(List<Object> data){
+    public static ApiResponseTemplate OK(Object data){
         return ApiResponseTemplate.builder()
                 .httpStatus(HttpStatus.OK)
                 .message("OK")
@@ -53,7 +53,7 @@ public class ApiResponseTemplate {
                 .build();
     }
 
-    public static ApiResponseTemplate OK(String message, List<Object> data){
+    public static ApiResponseTemplate OK(String message, Object data){
         return ApiResponseTemplate.builder()
                 .httpStatus(HttpStatus.OK)
                 .message(message)

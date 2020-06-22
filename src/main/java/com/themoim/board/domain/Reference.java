@@ -1,6 +1,7 @@
 package com.themoim.board.domain;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+@Getter
 @Table(name = "Reference")
 @Entity
 @NoArgsConstructor
@@ -21,10 +23,10 @@ public class Reference {
 
     private String content;
 
-    @Column(name = "create_at")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "modified_at")
+    @Column(name = "modified_at", insertable = false, updatable = false)
     private LocalDateTime modifiedAt;
 
     @Column(name = "written_by")

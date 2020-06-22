@@ -2,6 +2,7 @@ package com.themoim.board.controller;
 
 import com.themoim.board.domain.common.ApiResponseTemplate;
 import com.themoim.board.domain.dto.ReferenceCreateRequestDto;
+import com.themoim.board.domain.dto.ReferenceListRequestDto;
 import com.themoim.board.service.ReferenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,8 @@ public class ReferenceController {
         return null;
     }
 
-    @GetMapping("/api/reference")
-    public String list() {
-        return null;
+    @GetMapping("/api/references")
+    public ApiResponseTemplate list(@RequestBody ReferenceListRequestDto referenceListRequestDto) {
+        return referenceService.list(referenceListRequestDto);
     }
 }
