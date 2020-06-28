@@ -1,4 +1,4 @@
-package com.themoim.board.domain.dto;
+package com.themoim.board.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
+// TODO : page를 제네릭으로 처리하면 내용물만 바뀌면 됨
 @NoArgsConstructor
 @Getter
 public class ReferenceListResponseDto {

@@ -1,4 +1,4 @@
-package com.themoim.board.domain.dto;
+package com.themoim.board.dto;
 
 import lombok.Builder;
 import lombok.Getter;

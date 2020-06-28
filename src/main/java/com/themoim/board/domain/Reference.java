@@ -1,5 +1,7 @@
 package com.themoim.board.domain;
 
+import com.themoim.board.dto.ReferenceCreateResponseDto;
+import com.themoim.board.dto.ReferenceUpdateResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +12,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
-@Table(name = "Reference")
-@Entity
+@Entity(name = "Reference")
 @NoArgsConstructor
 public class Reference {
     @Id
@@ -40,5 +41,36 @@ public class Reference {
         this.title = title;
         this.content = content;
         this.writtenBy = writtenBy;
+    }
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
+    public ReferenceUpdateResponseDto toUpdateResponse() {
+        return ReferenceUpdateResponseDto.builder()
+                .rId(rId)
+                .title(title)
+                .content(content)
+                .writtenBy(writtenBy)
+                .modifiedAt(modifiedAt)
+                .createdAt(createdAt)
+                .build();
+    }
+
+    public ReferenceCreateResponseDto toCreateResponseDto() {
+        return ReferenceCreateResponseDto.builder()
+                .rId(rId)
+                .title(title)
+                .content(content)
+                .writtenBy(writtenBy)
+                .modifiedAt(modifiedAt)
+                .createdAt(createdAt)
+                .isDeleted(isDeleted)
+                .build();
     }
 }
