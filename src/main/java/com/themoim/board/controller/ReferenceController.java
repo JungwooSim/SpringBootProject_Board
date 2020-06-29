@@ -33,6 +33,15 @@ public class ReferenceController {
         return responseResource;
     }
 
+    @DeleteMapping("/api/reference/{id}")
+    public ApiResponseTemplate<ReferenceDeleteResponseDto> delete(
+            @PathVariable("id") Long id
+    ) {
+        ReferenceDeleteResponseDto referenceDeleteResponseDto = referenceService.delete(id);
+        ApiResponseTemplate<ReferenceDeleteResponseDto> responseResource = ApiResponseTemplate.ok(referenceDeleteResponseDto);
+        return responseResource;
+    }
+
 
     @GetMapping("/api/reference/{id}")
     public String referenceDetail() {

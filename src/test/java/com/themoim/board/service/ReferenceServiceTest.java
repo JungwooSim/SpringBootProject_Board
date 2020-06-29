@@ -2,6 +2,7 @@ package com.themoim.board.service;
 
 import com.themoim.board.domain.Reference;
 import com.themoim.board.domain.ReferenceRepository;
+import com.themoim.board.dto.ReferenceDeleteResponseDto;
 import com.themoim.board.dto.ReferenceUpdateRequestDto;
 import com.themoim.board.dto.ReferenceUpdateResponseDto;
 import org.junit.Before;
@@ -58,5 +59,28 @@ public class ReferenceServiceTest {
         // then
         assertThat(reference.getTitle(), is(referenceUpdateRequestDto.getTitle()));
         assertThat(reference.getContent(), is(referenceUpdateRequestDto.getContent()));
+    }
+
+    @Test
+    public void 게시글_삭제() {
+        // given
+        Long id = 1L;
+
+        Reference reference = Reference.builder()
+                .title("title")
+                .content("content")
+                .writtenBy(1L)
+                .build();
+
+
+
+        given(referenceRepository.findById(id)).willReturn(Optional.of(reference));
+
+        // when
+        reference.deleteReference();
+        ReferenceDeleteResponseDto referenceDeleteResponseDto = reference.toDeleteResponse();
+
+        //then
+        assertThat(referenceDeleteResponseDto.getIsDeleted(), is(1L));
     }
 }

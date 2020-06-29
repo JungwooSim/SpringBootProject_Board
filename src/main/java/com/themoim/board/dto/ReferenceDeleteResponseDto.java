@@ -6,14 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReferenceCreateResponseDto {
+public class ReferenceDeleteResponseDto {
     private Long rId;
 
     private String title;
@@ -31,4 +30,5 @@ public class ReferenceCreateResponseDto {
 
     @JsonProperty(value = "is_deleted")
     private Long isDeleted;
+
 }

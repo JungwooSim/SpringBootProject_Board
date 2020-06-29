@@ -16,10 +16,11 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ReferenceController.class)
@@ -58,5 +59,22 @@ public class ReferenceControllerTest {
         // then
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.code", is(200)));
+    }
+
+    @Test
+    public void 게시글_삭제() throws Exception {
+        // given
+        Long id = 1L;
+
+        given(referenceService.delete(id)).willReturn(null);
+
+        // when
+        final ResultActions actions = mockMvc.perform(
+                delete("/api/reference/"+id)
+                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print());
+
+        //then
+        actions.andExpect(status().isOk());
     }
 }

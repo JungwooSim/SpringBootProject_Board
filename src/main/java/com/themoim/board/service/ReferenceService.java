@@ -2,7 +2,6 @@ package com.themoim.board.service;
 
 import com.themoim.board.domain.Reference;
 import com.themoim.board.domain.ReferenceRepository;
-import com.themoim.board.common.ApiResponseTemplate;
 import com.themoim.board.dto.*;
 import com.themoim.board.exception.BusinessErrorException;
 import lombok.RequiredArgsConstructor;
@@ -62,5 +61,15 @@ public class ReferenceService {
         ReferenceUpdateResponseDto referenceUpdateResponseDto = reference.toUpdateResponse();
 
         return referenceUpdateResponseDto;
+    }
+
+    @Transactional
+    public ReferenceDeleteResponseDto delete(Long id) {
+        Reference reference = referenceRepository.findById(id).orElseThrow(() -> new BusinessErrorException("유효한 게시물이 아닙니다."));
+        reference.deleteReference();
+
+        ReferenceDeleteResponseDto referenceDeleteResponseDto = reference.toDeleteResponse();
+
+        return referenceDeleteResponseDto;
     }
 }

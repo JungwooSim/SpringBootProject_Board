@@ -1,6 +1,7 @@
 package com.themoim.board.domain;
 
 import com.themoim.board.dto.ReferenceCreateResponseDto;
+import com.themoim.board.dto.ReferenceDeleteResponseDto;
 import com.themoim.board.dto.ReferenceUpdateResponseDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,10 +25,10 @@ public class Reference {
 
     private String content;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "modified_at", insertable = false, updatable = false)
+    @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
     @Column(name = "written_by")
@@ -64,6 +65,22 @@ public class Reference {
 
     public ReferenceCreateResponseDto toCreateResponseDto() {
         return ReferenceCreateResponseDto.builder()
+                .rId(rId)
+                .title(title)
+                .content(content)
+                .writtenBy(writtenBy)
+                .modifiedAt(modifiedAt)
+                .createdAt(createdAt)
+                .isDeleted(isDeleted)
+                .build();
+    }
+
+    public void deleteReference() {
+        this.isDeleted = 1L;
+    }
+
+    public ReferenceDeleteResponseDto toDeleteResponse() {
+        return ReferenceDeleteResponseDto.builder()
                 .rId(rId)
                 .title(title)
                 .content(content)
