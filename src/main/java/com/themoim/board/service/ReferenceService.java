@@ -1,6 +1,8 @@
 package com.themoim.board.service;
 
 import com.themoim.board.domain.Reference;
+import com.themoim.board.domain.ReferenceFileLink;
+import com.themoim.board.domain.ReferenceFileLinkRepository;
 import com.themoim.board.domain.ReferenceRepository;
 import com.themoim.board.dto.*;
 import com.themoim.board.exception.BusinessErrorException;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,13 +21,43 @@ import java.util.stream.Collectors;
 @Service
 public class ReferenceService {
     private final ReferenceRepository referenceRepository;
+    private final ReferenceFileLinkRepository referenceFileLinkRepository;
 
     @Transactional
     public ReferenceCreateResponseDto create(ReferenceCreateRequestDto referenceCreateRequestDto) {
         Reference reference = referenceCreateRequestDto.toEntity();
-        referenceRepository.save(reference);
 
-        ReferenceCreateResponseDto referenceCreateResponseDto = reference.toCreateResponseDto();
+        List<ReferenceFileLink> referenceFileLink = new ArrayList<>();
+
+        referenceCreateRequestDto.getFiles().forEach(
+                file -> {
+                    referenceFileLink.add(
+                            ReferenceFileLink.builder().link(file.get("filePath")).reference(reference).build()
+                    );
+                }
+        );
+
+        referenceRepository.save(reference);
+        referenceFileLinkRepository.saveAll(referenceFileLink);
+
+        List<ReferenceFileContentDto> referenceFileContentDto = new ArrayList<>();
+
+        referenceFileLink.forEach(referenceFile -> {
+            referenceFileContentDto.add(
+                    ReferenceFileContentDto
+                            .builder()
+                            .rflId(referenceFile.getRflId())
+                            .link(referenceFile.getLink())
+                            .build()
+            );
+        });
+
+        ReferenceCreateResponseDto referenceCreateResponseDto = ReferenceCreateResponseDto.builder()
+            .rId(reference.getRId())
+            .title(reference.getTitle())
+            .content(reference.getContent())
+            .files(referenceFileContentDto)
+            .build();
 
         return referenceCreateResponseDto;
     }

@@ -1,11 +1,17 @@
 package com.themoim.board.domain;
 
-import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Table(name = "reference_file_link")
-@Entity
+@Getter
+@Entity(name = "reference_file_link")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReferenceFileLink {
 
     @Column(name = "rfl_id")
@@ -13,8 +19,9 @@ public class ReferenceFileLink {
     @Id
     private Long rflId;
 
-    private String link;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "r_id", referencedColumnName ="r_id")
+    private Reference reference;
 
-    @Column(name = "r_id")
-    private Long rId;
+    private String link;
 }

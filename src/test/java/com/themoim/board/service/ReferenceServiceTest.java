@@ -1,15 +1,18 @@
 package com.themoim.board.service;
 
 import com.themoim.board.domain.Reference;
+import com.themoim.board.domain.ReferenceFileLink;
+import com.themoim.board.domain.ReferenceFileLinkRepository;
 import com.themoim.board.domain.ReferenceRepository;
-import com.themoim.board.dto.ReferenceDeleteResponseDto;
-import com.themoim.board.dto.ReferenceUpdateRequestDto;
-import com.themoim.board.dto.ReferenceUpdateResponseDto;
+import com.themoim.board.dto.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,10 +25,60 @@ public class ReferenceServiceTest {
     @Mock
     ReferenceRepository referenceRepository;
 
+    @Mock
+    ReferenceFileLinkRepository referenceFileLinkRepository;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        this.referenceService = new ReferenceService(referenceRepository);
+        this.referenceService = new ReferenceService(referenceRepository, referenceFileLinkRepository);
+    }
+
+    @Test
+    public void insert() {
+        // given
+        List<HashMap<String, String>> files = new ArrayList();
+        files.add(
+                new HashMap<String, String>() {
+                    {
+                        put("filePath","/Users/bigpenguin/file/test1.xls");
+                    }
+                }
+        );
+        files.add(
+                new HashMap<String, String>() {
+                    {
+                        put("filePath","/Users/bigpenguin/file/test2.xls");
+                    }
+                }
+        );
+        ReferenceCreateRequestDto referenceCreateRequestDto = ReferenceCreateRequestDto.builder()
+                .title("6")
+                .content("dddddddd")
+                .files(files)
+                .build();
+
+        Reference reference = referenceCreateRequestDto.toEntity();
+
+        List<ReferenceFileLink> referenceFileLink = new ArrayList<>();
+
+        referenceCreateRequestDto.getFiles().forEach(
+                file -> {
+                    referenceFileLink.add(
+                            ReferenceFileLink.builder().link(file.get("filePath")).reference(reference).build()
+                    );
+                }
+        );
+
+        // when
+        given(referenceRepository.save(reference)).willReturn(reference);
+        given(referenceFileLinkRepository.saveAll(referenceFileLink)).willReturn(referenceFileLink);
+
+        ReferenceCreateResponseDto referenceCreateResponseDto = referenceService.create(referenceCreateRequestDto);
+
+        // then
+        assertThat(referenceCreateResponseDto.getFiles().size(), is(2));
+        assertThat(referenceCreateResponseDto.getFiles().get(0).getLink(), is(files.get(0).get("filePath")));
     }
 
     @Test

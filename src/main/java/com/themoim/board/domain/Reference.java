@@ -3,17 +3,18 @@ package com.themoim.board.domain;
 import com.themoim.board.dto.ReferenceCreateResponseDto;
 import com.themoim.board.dto.ReferenceDeleteResponseDto;
 import com.themoim.board.dto.ReferenceUpdateResponseDto;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
 @Entity(name = "Reference")
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Reference {
     @Id
@@ -36,13 +37,6 @@ public class Reference {
 
     @Column(name = "is_deleted")
     private Long isDeleted = 0L;
-
-    @Builder
-    public Reference(String title, String content, Long writtenBy) {
-        this.title = title;
-        this.content = content;
-        this.writtenBy = writtenBy;
-    }
 
     public void changeTitle(String title) {
         this.title = title;
@@ -91,3 +85,4 @@ public class Reference {
                 .build();
     }
 }
+

@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -14,11 +14,11 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReferenceUpdateRequestDto {
-    @NotEmpty(message = "제목을 입력해주세요.")
+    @NotBlank(message = "제목을 입력해주세요.")
     @Size(max = 50, message = "제목은 50글자 내외로 입력해주시기 바랍니다.")
     private String title;
 
-    @NotEmpty(message = "내용을 입력해주세요.")
+    @NotBlank(message = "내용을 입력해주세요.")
     private String content;
 
     // TODO :: 사용자 데이터를 임시로 넣어줌. 나중이 삭제 필요

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 
 @Getter
 @Builder
@@ -19,6 +21,8 @@ public class ReferenceCreateResponseDto {
     private String title;
 
     private String content;
+
+    private List<ReferenceFileContentDto> files;
 
     @JsonProperty(value = "created_at")
     private LocalDateTime createdAt;
