@@ -34,6 +34,48 @@ public class ReferenceControllerTest {
     ReferenceService referenceService;
 
     @Test
+    public void insert_파일없을때() throws Exception {
+        // given
+        ReferenceCreateRequestDto referenceCreateRequestDto = ReferenceCreateRequestDto.builder()
+                .title("6")
+                .content("dddddddd")
+                .build();
+
+        List<ReferenceFileContentDto> referenceFileContentDto = new ArrayList<>();
+        referenceFileContentDto.add(
+                ReferenceFileContentDto
+                        .builder()
+                        .rflId(1L)
+                        .build()
+        );
+        referenceFileContentDto.add(
+                ReferenceFileContentDto
+                        .builder()
+                        .rflId(2L)
+                        .build()
+        );
+
+        ReferenceCreateResponseDto referenceCreateResponseDto = ReferenceCreateResponseDto.builder()
+                .rId(1L)
+                .title(referenceCreateRequestDto.getTitle())
+                .content(referenceCreateRequestDto.getContent())
+                .build();
+        given(referenceService.create(referenceCreateRequestDto)).willReturn(referenceCreateResponseDto);
+
+        // when
+        final ResultActions actions = mockMvc.perform(post("/api/reference")
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "    \"title\": \"6\",\n" +
+                        "    \"content\": \"dddddddd\"\n" +
+                        "}")
+        ).andDo(print());
+
+        actions.andExpect(status().isCreated());
+    }
+
+    @Test
     public void insert() throws Exception {
         // given
         List<HashMap<String, String>> files = new ArrayList();

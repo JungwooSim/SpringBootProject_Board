@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
 
 public class ReferenceServiceTest {
@@ -35,7 +37,26 @@ public class ReferenceServiceTest {
     }
 
     @Test
-    public void insert() {
+    public void insert_파일없을때() {
+        // given
+        ReferenceCreateRequestDto referenceCreateRequestDto = ReferenceCreateRequestDto.builder()
+                .title("6")
+                .content("dddddddd")
+                .build();
+
+        Reference reference = referenceCreateRequestDto.toEntity();
+
+        // when
+        given(referenceRepository.save(reference)).willReturn(reference);
+
+        ReferenceCreateResponseDto referenceCreateResponseDto = referenceService.create(referenceCreateRequestDto);
+
+        // then
+        assertThat(referenceCreateResponseDto.getFiles(), is(nullValue()));
+    }
+
+    @Test
+    public void insert_파일있을때() {
         // given
         List<HashMap<String, String>> files = new ArrayList();
         files.add(

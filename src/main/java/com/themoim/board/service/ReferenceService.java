@@ -27,37 +27,45 @@ public class ReferenceService {
     public ReferenceCreateResponseDto create(ReferenceCreateRequestDto referenceCreateRequestDto) {
         Reference reference = referenceCreateRequestDto.toEntity();
 
-        List<ReferenceFileLink> referenceFileLink = new ArrayList<>();
-
-        referenceCreateRequestDto.getFiles().forEach(
-                file -> {
-                    referenceFileLink.add(
-                            ReferenceFileLink.builder().link(file.get("filePath")).reference(reference).build()
-                    );
-                }
-        );
-
         referenceRepository.save(reference);
-        referenceFileLinkRepository.saveAll(referenceFileLink);
-
-        List<ReferenceFileContentDto> referenceFileContentDto = new ArrayList<>();
-
-        referenceFileLink.forEach(referenceFile -> {
-            referenceFileContentDto.add(
-                    ReferenceFileContentDto
-                            .builder()
-                            .rflId(referenceFile.getRflId())
-                            .link(referenceFile.getLink())
-                            .build()
-            );
-        });
 
         ReferenceCreateResponseDto referenceCreateResponseDto = ReferenceCreateResponseDto.builder()
-            .rId(reference.getRId())
-            .title(reference.getTitle())
-            .content(reference.getContent())
-            .files(referenceFileContentDto)
-            .build();
+                .rId(reference.getRId())
+                .title(reference.getTitle())
+                .content(reference.getContent())
+                .build();
+
+        if (referenceCreateRequestDto.getFiles() != null) {
+            List<ReferenceFileLink> referenceFileLink = new ArrayList<>();
+            referenceCreateRequestDto.getFiles().forEach(
+                    file -> {
+                        referenceFileLink.add(
+                                ReferenceFileLink.builder().link(file.get("filePath")).reference(reference).build()
+                        );
+                    }
+            );
+
+            referenceFileLinkRepository.saveAll(referenceFileLink);
+
+            List<ReferenceFileContentDto> referenceFileContentDto = new ArrayList<>();
+
+            referenceFileLink.forEach(referenceFile -> {
+                referenceFileContentDto.add(
+                        ReferenceFileContentDto
+                                .builder()
+                                .rflId(referenceFile.getRflId())
+                                .link(referenceFile.getLink())
+                                .build()
+                );
+            });
+
+            referenceCreateResponseDto = ReferenceCreateResponseDto.builder()
+                    .rId(reference.getRId())
+                    .title(reference.getTitle())
+                    .content(reference.getContent())
+                    .files(referenceFileContentDto)
+                    .build();
+        }
 
         return referenceCreateResponseDto;
     }
